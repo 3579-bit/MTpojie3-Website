@@ -1,0 +1,16 @@
+{
+  "heroTitle": "MT破解屍 3.0",
+  "heroLead": "三個平台，一套系統。",
+  "heroCopy": "把多桌資訊、即時牌面、牌路、分析與視訊整合到同一個工作介面。",
+  "systemUrl": "https://mtmatrlx.onrender.com",
+  "lineUrl": "",
+  "threadsUrl": "",
+  "demoUrl": "",
+  "roadmap": [
+    "MT × DG × T9 三平台",
+    "登入與連接流程持續自動化",
+    "手機操作與懸浮體驗優化",
+    "更多分析模型與平台支援",
+    "試用機制規劃"
+  ]
+}

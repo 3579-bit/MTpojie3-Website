@@ -1,7 +1,11 @@
-const express = require("express");
-const path = require("path");
-const app = express();
-const port = process.env.PORT || 10000;
-app.use(express.static(path.join(__dirname, "public")));
-app.get("*", (_,res)=>res.sendFile(path.join(__dirname,"public","index.html")));
-app.listen(port,()=>console.log(`MT破解屍 3.0 website running on ${port}`));
+const express=require("express"),path=require("path"),fs=require("fs"),crypto=require("crypto");
+const app=express(),port=process.env.PORT||10000; app.use(express.json());
+const file=path.join(__dirname,"data","site-config.json"),sessions=new Set();
+const read=()=>JSON.parse(fs.readFileSync(file,"utf8"));
+const auth=(q,s,n)=>{let t=(q.headers.authorization||"").replace("Bearer ","");sessions.has(t)?n():s.status(401).json({error:"unauthorized"})};
+app.get("/api/config",(q,s)=>s.json(read()));
+app.post("/api/admin/login",(q,s)=>{if(!process.env.ADMIN_PASSWORD)return s.status(503).json({error:"尚未設定 ADMIN_PASSWORD"});if(q.body.password!==process.env.ADMIN_PASSWORD)return s.status(401).json({error:"密碼錯誤"});let t=crypto.randomBytes(24).toString("hex");sessions.add(t);s.json({token:t})});
+app.get("/api/admin/config",auth,(q,s)=>s.json(read()));
+app.put("/api/admin/config",auth,(q,s)=>{let v={...read(),...q.body};fs.writeFileSync(file,JSON.stringify(v,null,2));s.json({ok:true})});
+app.use(express.static(path.join(__dirname,"public")));app.get("/admin",(q,s)=>s.sendFile(path.join(__dirname,"public","admin.html")));
+app.get("*",(q,s)=>s.sendFile(path.join(__dirname,"public","index.html")));app.listen(port,()=>console.log("MT 3.0 V2",port));
