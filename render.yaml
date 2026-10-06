@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: mt-pojieshi-3
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeploy: true
